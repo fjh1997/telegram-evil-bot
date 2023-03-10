@@ -15,7 +15,9 @@ logger = logging.getLogger(__name__)
 
 async def hack(cmd):
     try:
-        result=check_output(["runasuser.exe","jail","jail","RestrictShutdown.exe","python.exe", "-c", cmd], stderr=STDOUT, timeout=5).decode("gbk")
+        result=check_output(["runasuser.exe","jail","jail","RestrictShutdown.exe",
+        # absolute path is needed I dont know why
+        r"C:\Users\54930\AppData\Local\Programs\Python\Python310\python.exe", "-c", cmd], stderr=STDOUT, timeout=5).decode("gbk")
     except Exception as e:
         result=str(e)
         
