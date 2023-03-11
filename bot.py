@@ -26,17 +26,23 @@ async def hack(cmd):
 
 async def do_eval(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.message.from_user
-    logger.info("%s: %s", user.username, update.message.text)
+    logger.info("%s %s %s: %s",user.first_name ,user.last_name,user.username, update.message.text)
     result = await hack(update.message.text)
-    await context.bot.send_message(chat_id=update.effective_chat.id, text=result)
+    try:
+        await context.bot.send_message(chat_id=update.effective_chat.id, text=result)
+    except Exception as e:
+        await context.bot.send_message(chat_id=update.effective_chat.id, text=str(e))
 
 
 async def do_eval_group(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if "@catcatworm_bot" in update.message.parse_entities("mention").values():
         user = update.message.from_user
-        logger.info("%s: %s", user.username, update.message.text)
+        logger.info("%s %s %s: %s",user.first_name ,user.last_name,user.username, update.message.text)
         result=await hack(update.message.text.replace("@catcatworm_bot",""))
-        await context.bot.send_message(chat_id=update.effective_chat.id, text=result)
+        try:
+            await context.bot.send_message(chat_id=update.effective_chat.id, text=result)
+        except Exception as e:
+            await context.bot.send_message(chat_id=update.effective_chat.id, text=str(e))
     
 if __name__ == "__main__":
     token=input("please input your token:")
