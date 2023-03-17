@@ -2,7 +2,7 @@ import logging
 from telegram import Update
 from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler,MessageHandler,filters
 from subprocess import STDOUT, check_output
-
+import asyncio
 
 
 
@@ -29,9 +29,9 @@ async def do_eval(update: Update, context: ContextTypes.DEFAULT_TYPE):
     logger.info("%s %s %s: %s",user.first_name ,user.last_name,user.username, update.message.text)
     result = await hack(update.message.text)
     try:
-        await context.bot.send_message(chat_id=update.effective_chat.id, text=result)
+        message=await context.bot.send_message(chat_id=update.effective_chat.id, text=result)
     except Exception as e:
-        await context.bot.send_message(chat_id=update.effective_chat.id, text=str(e))
+        message=await context.bot.send_message(chat_id=update.effective_chat.id, text=str(e))
 
 
 async def do_eval_group(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -40,12 +40,23 @@ async def do_eval_group(update: Update, context: ContextTypes.DEFAULT_TYPE):
         logger.info("%s %s %s: %s",user.first_name ,user.last_name,user.username, update.message.text)
         result=await hack(update.message.text.replace("@catcatworm_bot",""))
         try:
-            await context.bot.send_message(chat_id=update.effective_chat.id, text=result)
+            if len(result)>300:
+                result="message is too long"
+            message=await context.bot.send_message(chat_id=update.effective_chat.id, text=result)
+            await asyncio.sleep(10)
+            await message.delete()
         except Exception as e:
-            await context.bot.send_message(chat_id=update.effective_chat.id, text=str(e))
+            result=str(e)
+            if len(result)>300:
+                result="message is too long"
+            message=await context.bot.send_message(chat_id=update.effective_chat.id, text=result)
+            await asyncio.sleep(10)
+            await message.delete()
     
 if __name__ == "__main__":
-    token=input("please input your token:")
+    token=""
+    if token=="":
+        token=input("please input your token:")
     application = ApplicationBuilder().token(token).build()
     
     msg_handler = MessageHandler(filters.ChatType.PRIVATE, do_eval)
