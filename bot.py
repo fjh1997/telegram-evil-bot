@@ -41,14 +41,14 @@ async def do_eval_group(update: Update, context: ContextTypes.DEFAULT_TYPE):
         result=await hack(update.message.text.replace("@catcatworm_bot",""))
         try:
             if len(result)>300:
-                result="message is too long"
+                result=result[-300:]
             message=await context.bot.send_message(chat_id=update.effective_chat.id, text=result)
             await asyncio.sleep(10)
             await message.delete()
         except Exception as e:
             result=str(e)
             if len(result)>300:
-                result="message is too long"
+                result=result[-300:]
             message=await context.bot.send_message(chat_id=update.effective_chat.id, text=result)
             await asyncio.sleep(10)
             await message.delete()
