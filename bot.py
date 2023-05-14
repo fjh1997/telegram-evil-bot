@@ -12,6 +12,11 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await update.message.reply_text("A python bot to be hacked,for example send \"print(1)\" to me")        
+    
+async def help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await update.message.reply_text("A python bot to be hacked,for example send \"print(1)\" to me") 
 
 async def hack(cmd):
     try:
@@ -58,7 +63,8 @@ if __name__ == "__main__":
     if token=="":
         token=input("please input your token:")
     application = ApplicationBuilder().token(token).build()
-    
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(CommandHandler("help", help))
     msg_handler = MessageHandler(filters.ChatType.PRIVATE, do_eval)
     grp_handler = MessageHandler(filters.ChatType.GROUPS & filters.Entity("mention"), do_eval_group)
     application.add_handler(msg_handler)
