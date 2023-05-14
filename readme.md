@@ -9,3 +9,7 @@ cd <jail executive path>
 python bot.py
 ```
 ## enjoy other guys' hack
+
+## how to hack it 
+
+see [poc list](https://github.com/fjh1997/telegram-evil-bot/issues/1)
